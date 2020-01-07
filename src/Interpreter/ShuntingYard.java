@@ -132,7 +132,7 @@ public class ShuntingYard {
             }
         }
         Expression expAns = stackExp.pop();
-        System.out.println("Finished ShuntingYard answer: " + expAns);
+        //System.out.println("Finished ShuntingYard answer: " + expAns);
         return expAns;
     }
 

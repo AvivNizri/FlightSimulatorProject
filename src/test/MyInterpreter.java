@@ -1,7 +1,5 @@
 package test;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import Commands.CommandFactory;
@@ -10,17 +8,17 @@ import Parser.Parser;
 import ClientServer.Client;
 import ClientServer.Server;
 
-
-public class MyInterpreter {
+public class MyInterpreter{
 
     public static Double Value;
 
     public static  int interpret(String[] lines){
-        ConcurrentHashMap<String, Double> DoublesymbolTable = new ConcurrentHashMap<>(); // x = 5
-        ConcurrentHashMap<String, String> SymbolTable       = new ConcurrentHashMap<>(); // x -> path x
-        ConcurrentHashMap<String, Double> PathTable         = new ConcurrentHashMap<>(); //path simx -> value
+        ConcurrentHashMap<String, Double> propSymbolTable 	= new ConcurrentHashMap<>();
+        ConcurrentHashMap<String, String> symbolTable       = new ConcurrentHashMap<>();
+        ConcurrentHashMap<String, Double> configTable       = new ConcurrentHashMap<>();
 
-        String[] DMnames = new String[] {
+        // Thats the main configuration which being initialized at the very begining
+        String[] Configure = new String[]{
                 "simX",
                 "simY",
                 "simZ",
@@ -49,17 +47,15 @@ public class MyInterpreter {
                 "engines/engine/rpm"
         };
 
-        Server server = new Server(DMnames,PathTable); //original (DMnames)
-        Client client = new Client(DMnames, PathTable);
-        CommandFactory command_factory = new CommandFactory(server,client,SymbolTable,DoublesymbolTable,PathTable);
-        Lexer lex = new Lexer();
-        Parser parse = new Parser(command_factory);
-        for (String str : lines) {
-            parse.parse(lex.processLine(str));
+        Server server = new Server(Configure,configTable);
+        Client client = new Client(Configure, configTable);
+        CommandFactory commandFactory = new CommandFactory(server,client,symbolTable,propSymbolTable,configTable);
+        Lexer lexer = new Lexer();
+        Parser parse = new Parser(commandFactory);
+        for(String line : lines){
+            parse.parse(lexer.processLine(line));
         }
         server.stop();
         return Value.intValue();
-
-
     }
 }
