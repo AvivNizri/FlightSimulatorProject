@@ -21,13 +21,17 @@ public class VarAssignCommand  implements Command{
     public void doCommand(String[] arguments){
         //"x = bind simX",
         //"var h0 = heading",
-        if(!this.commandFactory.StringSymbolTable.containsKey(arguments[0])){
-            this.commandFactory.DoubleSymbolTable.put(arguments[0], this.shuntingYard.calc(arguments[arguments.length-1], this.commandFactory).calculate());
+        if (arguments[2].equals("bind") ) {
+            this.commandFactory.StringSymbolTable.put(arguments[0].trim(), arguments[arguments.length-1]);
         }
-        else{
-            this.commandFactory.PathTable.put(this.commandFactory.StringSymbolTable.get(arguments[0]), this.shuntingYard.calc(arguments[arguments.length-1], this.commandFactory).calculate()); //x = 10
-            if(this.client.GetSocket()!= null) {
-                this.client.setPathWithValue(this.commandFactory.StringSymbolTable.get(arguments[0]), this.shuntingYard.calc(arguments[arguments.length-1], this.commandFactory).calculate());
+        else {
+            if (!this.commandFactory.StringSymbolTable.containsKey(arguments[0])) {
+                this.commandFactory.DoubleSymbolTable.put(arguments[0], this.shuntingYard.calc(arguments[arguments.length - 1], this.commandFactory).calculate());
+            } else {
+                this.commandFactory.PathTable.put(this.commandFactory.StringSymbolTable.get(arguments[0]), this.shuntingYard.calc(arguments[arguments.length - 1], this.commandFactory).calculate()); //x = 10
+                if (this.client.GetSocket() != null) {
+                    this.client.setPathWithValue(this.commandFactory.StringSymbolTable.get(arguments[0]), this.shuntingYard.calc(arguments[arguments.length - 1], this.commandFactory).calculate());
+                }
             }
         }
     }

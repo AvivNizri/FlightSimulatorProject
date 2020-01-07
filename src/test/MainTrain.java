@@ -67,7 +67,7 @@ public class MainTrain {
                 "}",
                 "return y"
         };
-
+        System.out.println("start test5");
         if(MyInterpreter.interpret(test5)!=rand+2*5)
             System.out.println("failed test5 (-20)");
         System.out.println("Finished test5");

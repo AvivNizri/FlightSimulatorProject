@@ -21,6 +21,9 @@ public class MyInterpreter {
         ConcurrentHashMap<String, Double> PathTable         = new ConcurrentHashMap<>(); //path simx -> value
 
         String[] DMnames = new String[] {
+                "simX",
+                "simY",
+                "simZ",
                 "instrumentation/airspeed-indicator/indicated-speed-kt",
                 "instrumentation/altimeter/indicated-altitude-ft",
                 "instrumentation/altimeter/pressure-alt-ft",

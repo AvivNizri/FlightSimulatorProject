@@ -13,12 +13,12 @@ public class Server  {
     public Map<String, Double> PathTable;
     private boolean stop = false;
     private Thread MyThread;
-    private CommandFactory cf;
+    private CommandFactory commandFactory;
     private ServerSocket serverSocket = null;
     private Thread myThread = null;
     private Socket clientSock = null;
     private Socket connectSock = null;
-    private BufferedReader br = null;
+    private BufferedReader inBuffer = null;
     private PrintWriter pw = null;
     Object Lock = new Object();
     String[] DMnames;
@@ -32,36 +32,35 @@ public class Server  {
         this.MyThread = new Thread(() -> {
             try {
                 this.serverSocket = new ServerSocket(port);
-
             } catch (IOException e2) {
-                // TODO Auto-generated catch block
                 e2.printStackTrace();
             }
             while (!stop) {
                 try {
-                    System.out.println("here");
-                    clientSock = serverSocket.accept(); // blocking call
+                    System.out.println("try connect");
+                    this.clientSock = this.serverSocket.accept(); // blocking call
 
                     synchronized (Lock) {
-                        Lock.notifyAll();
+                        this.Lock.notifyAll();
                     }
                     System.out.println("Simulator connected!");
 
-                    this.br = new BufferedReader(new InputStreamReader(clientSock.getInputStream()));
+                    this.inBuffer = new BufferedReader(new InputStreamReader(clientSock.getInputStream()));
                     try {
-                        String line ;
-                        while ((line = br.readLine()) != null) {
-                            line = br.readLine();
-                            // System.out.println("Received from simulator: " + line);
+                        String line;
+                        while ((line = inBuffer.readLine()) != null) {
+                            line = inBuffer.readLine();
+                            //System.out.println("Received from simulator: " + line);
                             String[] ReadTheLines = line.split(",");
                             int size = ReadTheLines.length;
                             for(int i=0; i<size; i++) {
-
                                 PathTable.put(DMnames[i].trim(), Double.parseDouble(ReadTheLines[i]));
                             }
+                            //System.out.println("Closing server");
+                            this.serverSocket.close();
+                            line = null;
                         }
-                        System.out.println("Closing server");
-                        serverSocket.close();
+
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -97,7 +96,7 @@ public class Server  {
 
     public Map<String, Double> getData() {
 
-        return cf.DoubleSymbolTable;
+        return commandFactory.DoubleSymbolTable;
     }
 
 

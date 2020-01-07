@@ -63,6 +63,7 @@ public class Simulator {
                     }
                     in.close();
                     client.close();
+                    System.out.println("Server Got Bye");
                 }catch(SocketTimeoutException e){}
             }
             server.close();

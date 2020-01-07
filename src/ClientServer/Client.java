@@ -33,7 +33,6 @@ public class Client {
 
     //set /controls/engines/engine/throttle 1
     public void setPathWithValue(String path, Double value) {
-
         PathTable.put(path,value);
         SetClient.println("set " + path + " " + value);
         System.out.println("sent to simulator:" + "set " + path + " " + value);
